@@ -1,0 +1,79 @@
+{
+    "version": "0.1.0",
+    "command": "PowerShell.exe",
+    "isShellCommand": true,
+    "args": [
+        "-NoProfile",
+        "-ExecutionPolicy","Bypass",
+        "Invoke-PSake","${workspaceRoot}/build.psake.ps1"
+    ],
+    "suppressTaskName": true,
+    "tasks": [
+
+        {
+            "taskName": "Clean",
+            "showOutput": "always",
+            "args": [
+			    "-Task", "Clean",
+                "-properties", "@{}"
+			]
+        },
+
+        {
+            "taskName": "Build",
+            "isBuildCommand": true,
+            "showOutput": "always",
+            "args": [
+                "-Task", "default",
+                "-properties", "@{}"
+            ]
+        },
+
+        {
+            "taskName": "Test",
+            "isTestCommand": true,
+            "showOutput": "always",
+            "args": [
+                "-Task", "Test",
+                "-properties", "@{}"
+            ]
+        },
+
+        {
+            "taskName": "Package",
+            "showOutput": "always",
+            "args": [
+			    "-Task", "Package",
+                "-properties", "@{}"
+			]
+        },
+
+        {
+            "taskName": "Deploy",
+            "showOutput": "always",
+            "args": [
+			    "-Task", "Deploy",
+                "-properties", "@{}"
+			]
+        },
+
+        {
+            "taskName": "Install",
+            "showOutput": "always",
+            "args": [
+			    "-Task", "Install",
+                "-properties", "@{}"
+			]
+        },
+
+        {
+            "taskName": "Run",
+            "showOutput": "always",
+            "args": [
+			    "-Task", "Run",
+                "-properties", "@{}"
+			]
+        }
+        
+    ]
+}

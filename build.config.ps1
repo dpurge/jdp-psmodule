@@ -1,0 +1,4 @@
+@{
+    NugetSource = $null
+	NuGetApiKey = $null
+}
