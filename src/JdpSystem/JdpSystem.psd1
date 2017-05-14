@@ -1,11 +1,11 @@
 @{
-RootModule = 'JdpKeepass'
+RootModule = 'JdpSystem'
 ModuleVersion = '1.0'
-GUID = '9fd63fe8-a55d-4b0e-b9f0-f1aee9a68a40'
+GUID = '824016ad-d4c1-4590-8c01-7123a780be94'
 Author = 'jdp'
 CompanyName = 'JDP'
 Copyright = '(c) 2017 JDP. All rights reserved.'
-Description = 'Module for managing passwords in Keepass files.'
+Description = 'Module managing JDP system directory.'
 PowerShellVersion = '4.0'
 # PowerShellHostName = ''
 # PowerShellHostVersion = ''
@@ -17,7 +17,7 @@ CLRVersion = '4.0'
 # ScriptsToProcess = @()
 # TypesToProcess = @()
 FormatsToProcess = @(
-    'JdpKeepass.Example.Format.ps1xml'
+    'JdpSystem.Info.Format.ps1xml'
 )
 # NestedModules = @()
 FunctionsToExport = '*'
@@ -26,9 +26,9 @@ VariablesToExport = '*'
 AliasesToExport = '*'
 # ModuleList = @()
 FileList = @(
-    'JdpKeepass.psd1',
-	'JdpKeepass.psm1',
-	'JdpKeepass.Example.Format.ps1xml'
+    'JdpSystem.psd1',
+	'JdpSystem.psm1',
+	'JdpSystem.Info.Format.ps1xml'
 )
 PrivateData = @{
 
@@ -37,7 +37,7 @@ PrivateData = @{
 		    'powershell'
 		)
         # LicenseUri = 'https://github.com/USER/REPOSITORY/blob/master/LICENSE.txt'
-        # ProjectUri = 'https://github.com/USER/REPOSITORY'
+        ProjectUri = 'https://github.com/dpurge/jdp-psmodule'
         # IconUri = ''
         # ReleaseNotes = ''
     }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+  <Controls>
+
+    <Control>
+      <Name>Variable</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>
+                  $var = $_
+                  "Exists  Key            Name               Value`n"
+                  "------  -------------  -----------------  --------------------------------`n"
+                  $format = "{0,-6}  {1,-13}  {2,-17}  {3,-32}`n"
+                  $var.Keys | Foreach-Object {$format -F $var[$_].Exists, $_, $var[$_].Name, $var[$_].Value}
+                </ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+
+    <Control>
+      <Name>Directory</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>
+                  $dir = $_
+                  "Exists  Key            Path`n"
+                  "------  -------------  --------------------------------`n"
+                  $format = "{0,-6}  {1,-13}  {2,-32}`n"
+                  $dir.Keys | Foreach-Object {$format -F $dir[$_].Exists, $_, $dir[$_].FullName}
+                </ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+
+    <Control>
+      <Name>Path</Name>
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+              <ExpressionBinding>
+                <EnumerateCollection />
+                <ScriptBlock>
+                  $dir = $_
+                  "Exists  Key            Value`n"
+                  "------  -------------  --------------------------------`n"
+                  $format = "{0,-6}  {1,-13}  {2,-32}`n"
+                  $dir.Keys | Foreach-Object {$format -F $dir[$_].Exists, $_, $dir[$_].Value}
+                </ScriptBlock>
+              </ExpressionBinding>
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>
+    </Control>
+
+  </Controls>
+
+  <ViewDefinitions>
+
+    <View>
+      <Name>JdpSystem.Info</Name>
+
+      <ViewSelectedBy>
+        <TypeName>JdpSystem.Info</TypeName>
+      </ViewSelectedBy>
+      
+      <CustomControl>
+        <CustomEntries>
+          <CustomEntry>
+            <CustomItem>
+
+              <Text>Timestamp:</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Timestamp</PropertyName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem> 
+              </Frame>
+              <NewLine/>
+
+              <Text>Environment variables:</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Variable</PropertyName>
+                    <CustomControlName>Variable</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem> 
+              </Frame>
+
+              <Text>System directories:</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Directory</PropertyName>
+                    <CustomControlName>Directory</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem> 
+              </Frame>
+
+              <Text>Path entries:</Text>
+              <NewLine/>
+              <Frame>
+                <LeftIndent>4</LeftIndent>
+                <CustomItem>
+                  <ExpressionBinding>
+                    <PropertyName>Path</PropertyName>
+                    <CustomControlName>Path</CustomControlName>
+                  </ExpressionBinding>
+                  <NewLine/>
+                </CustomItem> 
+              </Frame>
+
+            </CustomItem>
+          </CustomEntry>
+        </CustomEntries>
+      </CustomControl>      
+    </View>
+
+  </ViewDefinitions>
+</Configuration>
