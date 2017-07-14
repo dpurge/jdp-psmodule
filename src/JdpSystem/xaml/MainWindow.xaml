@@ -1,0 +1,12 @@
+<Window 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	Title="Example Application" Height="400" Width="600" Background="Gray">
+	
+	<Window.TaskbarItemInfo>
+         <TaskbarItemInfo/>
+	</Window.TaskbarItemInfo>
+	
+    <Grid>
+    </Grid>
+	
+</Window>
