@@ -133,9 +133,9 @@ Task Build `
 		$ModuleNuspec = "$TempDir\$module.nuspec"
 		$ModuleReleaseNotes = @"
 Date of release: $(Get-Date)
-Source repository URI: MISSING
-Source branch: MISSING
-Source version: MISSING
+Source repository URI: $(git config --get remote.origin.url)
+Source branch: $(git branch | Where-Object {$_.StartsWith('*')} | ForEach-Object {$_ -replace '^\* ', ''})
+Source version: $(git rev-parse HEAD)
 "@
 		
 		if (Test-Path $ModuleNuspec) {
