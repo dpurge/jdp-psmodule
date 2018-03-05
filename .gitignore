@@ -1,5 +1,6 @@
 .DS_Store
 build.config.ps1
 .nuget
+.tools
 out
 tmp
