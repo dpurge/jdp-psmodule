@@ -34,13 +34,21 @@
             "label": "Build",
             "type": "shell",
             "command": "-Task Build -properties @{}",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         },
         {
             "label": "Test",
             "type": "shell",
             "command": "-Task Test -properties @{}",
-            "problemMatcher": []
+            "problemMatcher": [],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
         },
         {
             "label": "Package",
