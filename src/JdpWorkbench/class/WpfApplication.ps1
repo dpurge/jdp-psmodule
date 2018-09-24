@@ -6,7 +6,7 @@ class WpfApplication
 	$widget
 	$context
 	
-	WpfApplication($processId, [String] $xamlFile)
+	WpfApplication( [int] $processId, [string] $xamlFile )
 	{
 	    $this.process = Get-Process -PID $processId
 	    $this.xaml = [xml](Get-Content $xamlFile)
@@ -22,7 +22,7 @@ class WpfApplication
 		$this.context = New-Object System.Windows.Forms.ApplicationContext 
 	}
 	
-	setIcon($bitmap) {
+	[Void] setIcon($bitmap) {
 	    $this.window.Icon = $bitmap
 		$this.window.TaskbarItemInfo.Overlay = $bitmap
         $this.window.TaskbarItemInfo.Description = $this.window.Title

@@ -1,4 +1,4 @@
-function Install-JdpSystem {
+function Install-System {
 
 	[OutputType('JdpSystem.Info')]
     [CmdletBinding(SupportsShouldProcess)]

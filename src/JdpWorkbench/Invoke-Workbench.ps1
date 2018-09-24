@@ -3,5 +3,5 @@ function Invoke-Workbench {
     param()
     
     $Workbench = Get-Workbench
-    $Workbench.WriteHello()
+    $Workbench.Run()
 }

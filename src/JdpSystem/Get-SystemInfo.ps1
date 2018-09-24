@@ -1,4 +1,4 @@
-function Get-JdpSystemInfo {
+function Get-SystemInfo {
 
 	[OutputType('JdpSystem.Info')]
 	[CmdletBinding()]
