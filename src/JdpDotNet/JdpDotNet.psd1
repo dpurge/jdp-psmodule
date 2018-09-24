@@ -1,8 +1,8 @@
 @{
-    RootModule = 'JdpKeepass'
+    RootModule = 'JdpDotNet'
     ModuleVersion = '1.0'
-    GUID = 'f02efd3a-dcbe-4b89-8355-69c57e1958bb'
-    Description = 'Module for managing credentials in the KeePass file.'
+    GUID = '3d81c344-fb9a-4d21-a2be-130db5abc9c8'
+    Description = 'This module contains functions allowing investigation of dotnet assemblies.'
     # RequiredModules = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess = @()
@@ -11,8 +11,8 @@
     # NestedModules = @()
     # ModuleList = @()
     FileList = @(
-        'JdpKeepass.psd1',
-        'JdpKeepass.psm1'
+        'JdpDotNet.psd1',
+        'JdpDotNet.psm1'
     )
     PrivateData = @{
 

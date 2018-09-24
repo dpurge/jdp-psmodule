@@ -1,79 +1,70 @@
+// Available variables which can be used inside of strings.
+// ${workspaceRoot}: the root folder of the team
+// ${file}: the current opened file
+// ${fileBasename}: the current opened file's basename
+// ${fileDirname}: the current opened file's dirname
+// ${fileExtname}: the current opened file's extension
+// ${cwd}: the current working directory of the spawned process
+
+// See https://go.microsoft.com/fwlink/?LinkId=733558
+// for the documentation about the tasks.json format
+
 {
-    "version": "0.1.0",
-    "command": "PowerShell.exe",
-    "isShellCommand": true,
-    "args": [
-        "-NoProfile",
-        "-ExecutionPolicy","Bypass",
-        "Invoke-PSake","${workspaceRoot}/build.psake.ps1"
-    ],
-    "suppressTaskName": true,
-    "tasks": [
-
-        {
-            "taskName": "Clean",
-            "showOutput": "always",
-            "args": [
-			    "-Task", "Clean",
-                "-properties", "@{}"
-			]
-        },
-
-        {
-            "taskName": "Build",
-            "isBuildCommand": true,
-            "showOutput": "always",
-            "args": [
-                "-Task", "default",
-                "-properties", "@{}"
-            ]
-        },
-
-        {
-            "taskName": "Test",
-            "isTestCommand": true,
-            "showOutput": "always",
-            "args": [
-                "-Task", "Test",
-                "-properties", "@{}"
-            ]
-        },
-
-        {
-            "taskName": "Package",
-            "showOutput": "always",
-            "args": [
-			    "-Task", "Package",
-                "-properties", "@{}"
-			]
-        },
-
-        {
-            "taskName": "Deploy",
-            "showOutput": "always",
-            "args": [
-			    "-Task", "Deploy",
-                "-properties", "@{}"
-			]
-        },
-
-        {
-            "taskName": "Install",
-            "showOutput": "always",
-            "args": [
-			    "-Task", "Install",
-                "-properties", "@{}"
-			]
-        },
-
-        {
-            "taskName": "Run",
-            "showOutput": "always",
-            "args": [
-			    "-Task", "Run",
-                "-properties", "@{}"
-			]
+    "version": "2.0.0",
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "powershell.exe",
+                "args": [
+                    "-NoProfile",
+                    "-ExecutionPolicy", "Bypass",
+                    "-Command", "Invoke-PSake", "${workspaceRoot}/build.psake.ps1"
+                ],
+            }
         }
-        
+    },
+    "tasks": [
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "-Task Clean -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "-Task Build -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "command": "-Task Test -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Package",
+            "type": "shell",
+            "command": "-Task Package -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Deploy",
+            "type": "shell",
+            "command": "-Task Deploy -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install",
+            "type": "shell",
+            "command": "-Task Install -properties @{}",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run",
+            "type": "shell",
+            "command": "-Task Run -properties @{}",
+            "problemMatcher": []
+        }
     ]
 }

@@ -1,8 +1,7 @@
 $psake.use_exit_on_error = $true
-$config = & .\build.config.ps1
+$config = & "$($psake.build_script_dir)\build.config.ps1"
 
 properties {
-    # Source code management
     $CurrentDir = Resolve-Path .
     $BaseDir = $psake.build_script_dir
     $Invocation = (Get-Variable MyInvocation -Scope 1).Value
@@ -12,126 +11,31 @@ properties {
 	$TempDir   = "$BaseDir\tmp"
 	$PackageDir   = "$BaseDir\.nuget"
 
-    #$version = git.exe describe --abbrev=0 --tags
-
     # Parameters
-    $Modules = if ($config.ContainsKey('Modules')) { $config['Modules'] } else { Get-ChildItem -Path $SourceDir | ?{ $_.PSIsContainer } | Select-Object -ExpandProperty Name }
-    $Version = if ($config.ContainsKey('Version')) { $config['Version'] } else { '' }
-	$NugetExe = if ($config.ContainsKey('NugetExe')) { $config['NugetExe'] } else { 'nuget' }
-	$NugetSource = if ($config.ContainsKey('NugetSource')) { $config['NugetSource'] } else { $null }
-	$NuGetApiKey = if ($config.ContainsKey('NuGetApiKey')) { $config['NuGetApiKey'] } else { $null }
+
+    $Modules = if ($config.ContainsKey('Modules')) `
+        { $config['Modules'] } `
+            else { Get-ChildItem -Path $SourceDir | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name }
+
+    $Version = if ($config.ContainsKey('Version')) `
+        { $config['Version'] } `
+            else { '' }
+
+    $NugetExe = if ($config.ContainsKey('NugetExe')) `
+        { $config['NugetExe'] } `
+            else { 'nuget' }
+
+    $NugetSource = if ($config.ContainsKey('NugetSource')) `
+        { $config['NugetSource'] } `
+            else { $null }
+
+    $NuGetApiKey = if ($config.ContainsKey('NuGetApiKey')) `
+        { $config['NuGetApiKey'] } `
+            else { $null }
 }
 
-Import-Module platyPS
-
+# Import-Module platyPS
 Task default -depends Build
-
-# ---------- # ---------- # ---------- # ---------- # ---------- #
-
-Task GenerateVersion `
-    -description "Generate version string" `
-    -requiredVariable Version `
-{
-    if ([String]::IsNullOrWhiteSpace($Version))
-    {
-        Write-Host -NoNewline "`tGenerating version: "
-        $Timestamp = Get-Date
-        $VersionBuilder = New-Object System.Text.StringBuilder
-        [void] $VersionBuilder.Append($Timestamp.Year)
-        [void] $VersionBuilder.Append('.')
-        [void] $VersionBuilder.Append($Timestamp.Month)
-        [void] $VersionBuilder.Append('.')
-        [void] $VersionBuilder.Append($Timestamp.Day)
-        $script:Version = $VersionBuilder.ToString()
-    }
-    else
-    {
-        Write-Host -NoNewline "`tUsing version: "
-        $script:Version = $Version.Trim()
-    }
-    Write-Host $script:Version
-}
-
-# ---------- # ---------- # ---------- # ---------- # ---------- #
-
-Task CreateDirectory `
-    -description "Create temporary directories" `
-    -requiredVariable TempDir, OutputDir `
-{
-    # Create temp directory if it does not exist
-    if (-not (Test-Path -Path $TempDir -PathType Container))
-    {
-        Write-Host "`tCreating directory: $TempDir"
-        New-Item -ItemType Directory -Force -Path $TempDir | Out-Null
-    }
-
-    # Create output directory if it does not exist
-    if (-not (Test-Path -Path $OutputDir -PathType Container))
-    {
-        Write-Host "`tCreating directory: $OutputDir"
-        New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
-    }
-}
-
-# ---------- # ---------- # ---------- # ---------- # ---------- #
-
-Task RestoreTools `
-    -description "Restore tool dependencies" `
-    -requiredVariable BaseDir, NugetExe, PackageDir `
-{
-	[IO.FileInfo] $ToolCfgFile = Join-Path -Path $BaseDir -ChildPath 'tools.config'
-	if ($ToolCfgFile.Exists) {
-		$ToolCfg = Get-Content -Raw -Path $ToolCfgFile.FullName | ConvertFrom-Json
-		[IO.DirectoryInfo] $ToolCache = Join-Path -Path $BaseDir -ChildPath '.tools'
-		if ( -not $ToolCache.Exists ) { $ToolCache.Create() }
-		Push-Location $ToolCache.FullName
-		Write-Host "Restoring tools..."
-		foreach ( $tool in $ToolCfg ) {
-			if ($tool.package) {
-				[IO.FileInfo] $ToolPackage = Join-Path -Path $ToolCache.FullName -ChildPath $tool.package
-				if ($ToolPackage.Exists) {
-					Write-Host "Package for $($tool.name) already exists: $($ToolPackage.FullName)"
-				} else {
-					Write-Host "Restoring tool: $($tool.name)"
-					$wc = New-Object System.Net.WebClient
-					$wc.DownloadFile($tool.url, $ToolPackage.FullName)
-					$ToolPackage.Refresh()
-					if ( -not $ToolPackage.Exists ) { throw "Could not download $($tool.name) from: $($tool.url)" }
-				}
-			} else { Write-Host "Tool does not specify package: $($tool.name)" }
-		}
-		Pop-Location
-	} else {
-		Write-Host "Tools configuration file does not exist: $($ToolCfgFile.FullName)"
-	}
-}
-
-# ---------- # ---------- # ---------- # ---------- # ---------- #
-
-Task RestoreNuget `
-    -description "Restore nuget dependencies" `
-    -requiredVariable BaseDir, NugetExe, PackageDir `
-{
-    Push-Location $BaseDir
-	Write-Host "Restoring nuget packages..."
-	Exec {
-		#& $NugetExe restore -PackagesDirectory $PackageDir
-		& $NugetExe install -OutputDirectory $PackageDir -ExcludeVersion
-	}
-	Pop-Location
-}
-
-# ---------- # ---------- # ---------- # ---------- # ---------- #
-
-Task SetPsModulePath `
-    -description "Configure PSModulePath to import from temporary directory" `
-    -requiredVariable TempDir `
-{
-    if ($Env:PSModulePath.Split(';') -notcontains $TempDir) {
-	    Write-Host "Adding to PSModulePath: $TempDir"
-	    $Env:PSModulePath = $TempDir+ ';' + $Env:PSModulePath
-	}
-}
 
 # ---------- # ---------- # ---------- # ---------- # ---------- #
 
@@ -139,14 +43,14 @@ Task Clean `
     -description "Remove temporary artifacts" `
     -requiredVariable TempDir, OutputDir `
 {
-	if (Test-Path $TempDir) {
-		Write-Host "Removing directory: $TempDir"
-		Remove-Item $TempDir -Force -Recurse
-	}
-	if (Test-Path $OutputDir) {
-		Write-Host "Removing directory: $OutputDir"
-		Remove-Item $OutputDir -Force -Recurse
-	}
+    if (Test-Path $TempDir) {
+        Write-Host "Removing directory: $TempDir"
+        Remove-Item $TempDir -Force -Recurse
+    }
+    if (Test-Path $OutputDir) {
+        Write-Host "Removing directory: $OutputDir"
+        Remove-Item $OutputDir -Force -Recurse
+    }
 }
 
 # ---------- # ---------- # ---------- # ---------- # ---------- #
@@ -154,7 +58,7 @@ Task Clean `
 Task Build `
     -description "Build powershell modules" `
     -depends RestoreNuget, RestoreTools, GenerateVersion, CreateDirectory `
-    -requiredVariable SourceDir, TempDir, Version, Modules `
+    -requiredVariable SourceDir, TempDir, Version, Modules, Config `
 {
     foreach ($module in $Modules)
     {
@@ -166,9 +70,9 @@ Task Build `
 		$ModuleNuspec = "$TempDir\$module.nuspec"
 		$ModuleReleaseNotes = @"
 Date of release: $(Get-Date)
-Source repository URI: $(git config --get remote.origin.url)
-Source branch: $(git branch | Where-Object {$_.StartsWith('*')} | ForEach-Object {$_ -replace '^\* ', ''})
-Source version: $(git rev-parse HEAD)
+Source repository URI: MISSING
+Source branch: MISSING
+Source version: MISSING
 "@
 		
 		if (Test-Path $ModuleNuspec) {
@@ -182,10 +86,32 @@ Source version: $(git rev-parse HEAD)
 		}
 		
 		Write-Host "`tCreating directory: $ModuleOutputDir"
-        New-Item -ItemType Directory -Force -Path $ModuleOutputDir | Out-Null
+		New-Item -ItemType Directory -Force -Path $ModuleOutputDir | Out-Null
+		
+		switch ($module)
+		{
+			'example' {
+				New-Item -ItemType Directory -Force -Path $ModuleOutputDir\lib | Out-Null
+				Copy-Item -Path $PackageDir\NuGet.Core\lib\net40-Client\* -Destination $ModuleOutputDir\lib\ -Recurse
+			}
+		}
 		
 		Copy-Item -Path $ModuleSourceDir\* -Destination $ModuleOutputDir\ -Recurse -Exclude *.Tests.ps1, docs
-		(Get-Content $ModuleOutputPsd1) -replace "ModuleVersion\s*=\s*'\d(\.\d)+'", "ModuleVersion = '${script:Version}'" | Set-Content $ModuleOutputPsd1
+        
+        Update-ModuleManifest `
+            -Path $ModuleOutputPsd1 `
+            -ModuleVersion $script:Version `
+            -Author $( if ($config.ContainsKey('Author')) {$config.Author} else {'UNDEFINED'} ) `
+            -CompanyName $( if ($config.ContainsKey('CompanyName')) {$config.CompanyName} else {'UNDEFINED'} ) `
+            -Copyright $( if ($config.ContainsKey('Copyright')) {$config.Copyright} else {"(c) $( (Get-Date).Year ) All rights reserved."} )  `
+            -PowerShellVersion $( if ($config.ContainsKey('PowerShellVersion')) {$config.PowerShellVersion} else {'4.0'} ) `
+            -DotNetFrameworkVersion $( if ($config.ContainsKey('DotNetFrameworkVersion')) {$config.DotNetFrameworkVersion} else {'4.0'} ) `
+            -CLRVersion $( if ($config.ContainsKey('CLRVersion')) {$config.CLRVersion} else {'4.0'} ) `
+            -FunctionsToExport '*' `
+            -CmdletsToExport '*' `
+            -VariablesToExport '*' `
+            -AliasesToExport '*'
+
 		if (Test-Path "$ModuleSourceDir\docs") {
             foreach ($DocsDir in (Get-ChildItem -Path "$ModuleSourceDir\docs" | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name)) {
 			    Write-Host "Generating documentation: $ModuleOutputDir\$DocsDir"
@@ -333,3 +259,111 @@ Task Run `
 	
 	Start-Process -FilePath powershell.exe -WorkingDirectory $TempDir -ArgumentList @('-NoExit', '-Command', $InitScript)
 }
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #
+
+Task RestoreNuget `
+    -description "Restore nuget dependencies" `
+    -requiredVariable BaseDir, NugetExe, PackageDir `
+{
+    Push-Location $BaseDir
+    Write-Host "Restoring nuget packages..."
+    Exec {
+        & $NugetExe install -OutputDirectory $PackageDir -ExcludeVersion
+    }
+    Pop-Location
+}
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #
+
+Task GenerateVersion `
+    -description "Generate version string" `
+    -requiredVariable Version `
+{
+    if ([String]::IsNullOrWhiteSpace($Version))
+    {
+        Write-Host -NoNewline "`tGenerating version: "
+        $Timestamp = Get-Date
+        $VersionBuilder = New-Object System.Text.StringBuilder
+        [void] $VersionBuilder.Append($Timestamp.Year)
+        [void] $VersionBuilder.Append('.')
+        [void] $VersionBuilder.Append($Timestamp.Month)
+        [void] $VersionBuilder.Append('.')
+        [void] $VersionBuilder.Append($Timestamp.Day)
+        $script:Version = $VersionBuilder.ToString()
+    }
+    else
+    {
+        Write-Host -NoNewline "`tUsing version: "
+        $script:Version = $Version.Trim()
+    }
+    Write-Host $script:Version
+}
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #
+
+Task CreateDirectory `
+    -description "Create temporary directories" `
+    -requiredVariable TempDir, OutputDir `
+{
+    # Create temp directory if it does not exist
+    if (-not (Test-Path -Path $TempDir -PathType Container))
+    {
+        Write-Host "`tCreating directory: $TempDir"
+        New-Item -ItemType Directory -Force -Path $TempDir | Out-Null
+    }
+
+    # Create output directory if it does not exist
+    if (-not (Test-Path -Path $OutputDir -PathType Container))
+    {
+        Write-Host "`tCreating directory: $OutputDir"
+        New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
+    }
+}
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #
+
+Task SetPsModulePath `
+    -description "Configure PSModulePath to import from temporary directory" `
+    -requiredVariable TempDir `
+{
+    if ($Env:PSModulePath.Split(';') -notcontains $TempDir) {
+        Write-Host "Adding to PSModulePath: $TempDir"
+        $Env:PSModulePath = $TempDir+ ';' + $Env:PSModulePath
+    }
+}
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #
+
+Task RestoreTools `
+-description "Restore tool dependencies" `
+-requiredVariable BaseDir, NugetExe, PackageDir `
+{
+[IO.FileInfo] $ToolCfgFile = Join-Path -Path $BaseDir -ChildPath 'tools.config'
+if ($ToolCfgFile.Exists) {
+    $ToolCfg = Get-Content -Raw -Path $ToolCfgFile.FullName | ConvertFrom-Json
+    [IO.DirectoryInfo] $ToolCache = Join-Path -Path $BaseDir -ChildPath '.tools'
+    if ( -not $ToolCache.Exists ) { $ToolCache.Create() }
+    Push-Location $ToolCache.FullName
+    Write-Host "Restoring tools..."
+    foreach ( $tool in $ToolCfg ) {
+        if ($tool.package) {
+            [IO.FileInfo] $ToolPackage = Join-Path -Path $ToolCache.FullName -ChildPath $tool.package
+            if ($ToolPackage.Exists) {
+                Write-Host "Package for $($tool.name) already exists: $($ToolPackage.FullName)"
+            } else {
+                Write-Host "Restoring tool: $($tool.name)"
+                $wc = New-Object System.Net.WebClient
+                $wc.DownloadFile($tool.url, $ToolPackage.FullName)
+                $ToolPackage.Refresh()
+                if ( -not $ToolPackage.Exists ) { throw "Could not download $($tool.name) from: $($tool.url)" }
+            }
+        } else { Write-Host "Tool does not specify package: $($tool.name)" }
+    }
+    Pop-Location
+} else {
+    Write-Host "Tools configuration file does not exist: $($ToolCfgFile.FullName)"
+}
+}
+
+# ---------- # ---------- # ---------- # ---------- # ---------- #

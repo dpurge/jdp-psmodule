@@ -1,21 +1,21 @@
 ---
-external help file: example-help.xml
+external help file: DotNetTools-help.xml
 online version: 
 schema: 2.0.0
 ---
 
-# Get-Example
+# Get-AssemblyReference
 
 ## SYNOPSIS
 
 ## SYNTAX
 
 ```
-Get-Example [-Message] <String>
+Get-AssemblyReference [[-Directory] <DirectoryInfo>]
 ```
 
 ## DESCRIPTION
-A simple cmdlet template. 
+{{Fill in the Description}}
 
 ## EXAMPLES
 
@@ -26,15 +26,15 @@ A simple cmdlet template.
 
 ## PARAMETERS
 
-### -Message
-A string that will be returned as a property in the object.
+### -Directory
+{{Fill Directory Description}}
 
 ```yaml
-Type: String
+Type: DirectoryInfo
 Parameter Sets: (All)
 Aliases: 
 
-Required: True
+Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
@@ -46,6 +46,7 @@ Accept wildcard characters: False
 ## OUTPUTS
 
 ## NOTES
+Author: Janusz Prusaczyk
 
 ## RELATED LINKS
 

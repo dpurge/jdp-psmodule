@@ -1,8 +1,8 @@
 @{
-    RootModule = 'JdpKeepass'
+    RootModule = 'JdpServiceJob'
     ModuleVersion = '1.0'
-    GUID = 'f02efd3a-dcbe-4b89-8355-69c57e1958bb'
-    Description = 'Module for managing credentials in the KeePass file.'
+    GUID = 'f61e641c-9570-43fc-9400-017874bae427'
+    Description = 'Description is missing.'
     # RequiredModules = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess = @()
@@ -11,13 +11,13 @@
     # NestedModules = @()
     # ModuleList = @()
     FileList = @(
-        'JdpKeepass.psd1',
-        'JdpKeepass.psm1'
+        'JdpServiceJob.psd1',
+        'JdpServiceJob.psm1'
     )
     PrivateData = @{
 
         PSData = @{
-            Tags = @('PSModule')
+            Tags = @('powershell')
             # LicenseUri = 'https://github.com/USER/REPOSITORY/blob/master/LICENSE.txt'
             # ProjectUri = 'https://github.com/USER/REPOSITORY'
             # IconUri = ''

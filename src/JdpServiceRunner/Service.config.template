@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+
+  <service>
+    <!-- name name="string">PSService</name -->
+    <credential type="eval">get-credential default</credential>
+    <queue type="msmq">.\private$\PSService</queue>
+    <log type="file">C:\PSService.log</log>
+  </service>
+  
+  <jobs>
+    
+	<job id="dummy-job" respond="true">
+      <description>Example dummy job</description>
+      <command>Invoke-DummyJob</command>
+      <param>
+        <Item type="string">This is a test</Item>
+      </param>
+    </job>
+    
+	<job id="dummy-reporter" respond="false">
+      <description>Save results from dummy job</description>
+      <command>Invoke-DummyReporter</command>
+      <param>
+        <DataFile type="file">C:\DummyReport.txt</DataFile>
+		<DataItem type="self-eval">Message</DataItem>
+      </param>
+    </job>
+    
+  </jobs>
+	
+  <scheduler>
+    
+    <schedule id="stop-service">
+      <message type="service-message">
+        <subject>Stop service</subject>
+        <to>
+          <job>service</job>
+          <queue>.\private$\PSService</queue>
+        </to>
+        <from>
+          <job></job>
+          <queue></queue>
+        </from>
+        <data>STOP-SERVICE</data>
+      </message>
+    </schedule>
+    
+    <schedule id="test">
+      <message type="service-message">
+        <subject>Test dummy</subject>
+        <to>
+          <job>dummy-job</job>
+          <queue>.\private$\PSService</queue>
+        </to>
+        <from>
+          <job>dummy-reporter</job>
+          <queue>.\private$\PSService</queue>
+        </from>
+        <data></data>
+      </message>
+	</schedule>
+  
+    <schedule id="hourly"></schedule>
+    <schedule id="daily"></schedule>
+    <schedule id="weekly"></schedule>
+    <schedule id="monthly"></schedule>
+  </scheduler>
+
+  <credentials>
+    <credential id="default">
+      <domain></domain>
+      <username></username>
+      <password></password>
+    </credential>
+  </credentials>
+  
+</configuration>

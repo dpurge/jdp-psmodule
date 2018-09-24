@@ -1,8 +1,8 @@
 @{
-    RootModule = 'JdpKeepass'
+    RootModule = 'JdpWorkbench'
     ModuleVersion = '1.0'
-    GUID = 'f02efd3a-dcbe-4b89-8355-69c57e1958bb'
-    Description = 'Module for managing credentials in the KeePass file.'
+    GUID = '5048923a-2c4d-4d5f-9b50-cdc1be49ef5d'
+    Description = 'Workbench GUI for common tasks done interactively.'
     # RequiredModules = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess = @()
@@ -11,8 +11,8 @@
     # NestedModules = @()
     # ModuleList = @()
     FileList = @(
-        'JdpKeepass.psd1',
-        'JdpKeepass.psm1'
+        'JdpWorkbench.psd1',
+        'JdpWorkbench.psm1'
     )
     PrivateData = @{
 
