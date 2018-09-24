@@ -336,34 +336,34 @@ Task SetPsModulePath `
 # ---------- # ---------- # ---------- # ---------- # ---------- #
 
 Task RestoreTools `
--description "Restore tool dependencies" `
--requiredVariable BaseDir, NugetExe, PackageDir `
+    -description "Restore tool dependencies" `
+    -requiredVariable BaseDir, NugetExe, PackageDir `
 {
-[IO.FileInfo] $ToolCfgFile = Join-Path -Path $BaseDir -ChildPath 'tools.config'
-if ($ToolCfgFile.Exists) {
-    $ToolCfg = Get-Content -Raw -Path $ToolCfgFile.FullName | ConvertFrom-Json
-    [IO.DirectoryInfo] $ToolCache = Join-Path -Path $BaseDir -ChildPath '.tools'
-    if ( -not $ToolCache.Exists ) { $ToolCache.Create() }
-    Push-Location $ToolCache.FullName
-    Write-Host "Restoring tools..."
-    foreach ( $tool in $ToolCfg ) {
-        if ($tool.package) {
-            [IO.FileInfo] $ToolPackage = Join-Path -Path $ToolCache.FullName -ChildPath $tool.package
-            if ($ToolPackage.Exists) {
-                Write-Host "Package for $($tool.name) already exists: $($ToolPackage.FullName)"
-            } else {
-                Write-Host "Restoring tool: $($tool.name)"
-                $wc = New-Object System.Net.WebClient
-                $wc.DownloadFile($tool.url, $ToolPackage.FullName)
-                $ToolPackage.Refresh()
-                if ( -not $ToolPackage.Exists ) { throw "Could not download $($tool.name) from: $($tool.url)" }
-            }
-        } else { Write-Host "Tool does not specify package: $($tool.name)" }
+    [IO.FileInfo] $ToolCfgFile = Join-Path -Path $BaseDir -ChildPath 'tools.config'
+    if ($ToolCfgFile.Exists) {
+        $ToolCfg = Get-Content -Raw -Path $ToolCfgFile.FullName | ConvertFrom-Json
+        [IO.DirectoryInfo] $ToolCache = Join-Path -Path $BaseDir -ChildPath '.tools'
+        if ( -not $ToolCache.Exists ) { $ToolCache.Create() }
+        Push-Location $ToolCache.FullName
+        Write-Host "Restoring tools..."
+        foreach ( $tool in $ToolCfg ) {
+            if ($tool.package) {
+                [IO.FileInfo] $ToolPackage = Join-Path -Path $ToolCache.FullName -ChildPath $tool.package
+                if ($ToolPackage.Exists) {
+                    Write-Host "Package for $($tool.name) already exists: $($ToolPackage.FullName)"
+                } else {
+                    Write-Host "Restoring tool: $($tool.name)"
+                    $wc = New-Object System.Net.WebClient
+                    $wc.DownloadFile($tool.url, $ToolPackage.FullName)
+                    $ToolPackage.Refresh()
+                    if ( -not $ToolPackage.Exists ) { throw "Could not download $($tool.name) from: $($tool.url)" }
+                }
+            } else { Write-Host "Tool does not specify package: $($tool.name)" }
+        }
+        Pop-Location
+    } else {
+        Write-Host "Tools configuration file does not exist: $($ToolCfgFile.FullName)"
     }
-    Pop-Location
-} else {
-    Write-Host "Tools configuration file does not exist: $($ToolCfgFile.FullName)"
-}
 }
 
 # ---------- # ---------- # ---------- # ---------- # ---------- #
