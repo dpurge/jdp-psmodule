@@ -12,11 +12,11 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <!-- MenuItem Command="New" / -->
+                <MenuItem Header = "NewX" Name = "MenuItemNewX" />
                 <MenuItem Header="_Open" />
                 <MenuItem Header="_Save" />
                 <Separator />
-                <MenuItem Header="_Exit" Name="MenuItemExit" />
+                <MenuItem Header="_Exit" Name = "MenuItemExit" />
             </MenuItem>
         </Menu>
         <TextBox AcceptsReturn="True" />

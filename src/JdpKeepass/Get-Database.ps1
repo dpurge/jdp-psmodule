@@ -3,7 +3,7 @@ function Get-Database {
 	[OutputType('JdpKeepass.VaultInfo')]
 	param (
         [Parameter(Position=0)]
-        [string]$Vault = 'default',
+        [string] $Vault = 'default',
 		
 		[Parameter(Position=1)]
 		$Config = (Get-Config)
