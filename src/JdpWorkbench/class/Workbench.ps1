@@ -14,7 +14,7 @@ class Workbench : WpfApplication {
                 [System.Windows.RoutedEventArgs] $EventArg
             )
     
-            [System.Windows.MessageBox]::Show($Sender.Name + $Sender.parent.Message)
+            [System.Windows.MessageBox]::Show($Sender.Name + $this.Message)
             $EventArg.Handled = $true
         }
 
