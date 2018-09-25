@@ -1,9 +1,9 @@
-function Set-KeepassCredential {
+function Set-Credential {
     <#
     .SYNOPSIS
     .DESCRIPTION
     .EXAMPLE
-	    Remove-Module KeepassTools; Import-Module .\KeepassTools; Set-KeepassCredential -Title test1 -Group group1 -Credential $cred
+	    Set-JdpKeepassCredential -Title test1 -Group group1 -Credential (Get-Credential)
     .OUTPUTS
     .NOTES
         Author: JDP
@@ -11,7 +11,7 @@ function Set-KeepassCredential {
     #>
 	
 	
-	PARAM(
+	param (
         [Parameter(Position=0, Mandatory=$true)]
 		[ValidateNotNullOrEmpty()] 
         [string] $Title,
@@ -32,17 +32,16 @@ function Set-KeepassCredential {
         [string] $Vault = 'default',
 		
 		[Parameter(Position=6, Mandatory=$false)]
-		$Config = (Get-KeepassConfig)
+		$Config = (Get-Config)
     )
 	
 	[string] $UserName = $Credential.UserName
 	[string] $Password = [Runtime.InteropServices.Marshal]::PtrToStringAuto(
 	    [Runtime.InteropServices.Marshal]::SecureStringToBSTR($Credential.Password))
 	
-	$DB = Get-KeepassDatabase -Vault $Vault -Config $Config
-	$DB.Open()
-	$DB.Add($Title, $UserName, $Password, $Group, $Url, $Note)
-	$DB.Save()
-	$DB.Close()
-	
+	$Database = Get-Database -Vault $Vault -Config $Config
+	$Database.Open()
+	$Database.Add($Title, $UserName, $Password, $Group, $Url, $Note)
+	$Database.Save()
+	$Database.Close()
 }

@@ -19,7 +19,7 @@
         PSData = @{
             Tags = @('PSModule')
             # LicenseUri = 'https://github.com/USER/REPOSITORY/blob/master/LICENSE.txt'
-            # ProjectUri = 'https://github.com/USER/REPOSITORY'
+            ProjectUri = 'https://github.com/dpurge/jdp-psmodule'
             # IconUri = ''
             # ReleaseNotes = ''
         }

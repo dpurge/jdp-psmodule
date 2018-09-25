@@ -1,12 +1,21 @@
-<Window 
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	Title="Example Application" Height="400" Width="600" Background="Gray">
+<Window
+	Title="WPF Application"
+	Height="400" Width="600" Background="White"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <Window.Resources>
+        <sys:String x:Key="strHelloWorld">Hello, world!</sys:String>
+		
+        <Style TargetType="TextBlock">
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="FontSize" Value="56" />
+        </Style>
+    </Window.Resources>
 	
-	<Window.TaskbarItemInfo>
-         <TaskbarItemInfo/>
-	</Window.TaskbarItemInfo>
-	
-    <Grid>
-    </Grid>
+    <StackPanel Margin="10">
+	    <TextBlock Text="{StaticResource strHelloWorld}"/>
+    </StackPanel>
 	
 </Window>

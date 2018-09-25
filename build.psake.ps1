@@ -90,9 +90,9 @@ Source version: MISSING
 		
 		switch ($module)
 		{
-			'example' {
+			'JdpKeepass' {
 				New-Item -ItemType Directory -Force -Path $ModuleOutputDir\lib | Out-Null
-				Copy-Item -Path $PackageDir\NuGet.Core\lib\net40-Client\* -Destination $ModuleOutputDir\lib\ -Recurse
+				Copy-Item -Path $PackageDir\KeePassLib\lib\KeePassLib.dll -Destination $ModuleOutputDir\lib\
 			}
 		}
 		

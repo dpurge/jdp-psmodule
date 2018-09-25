@@ -1,0 +1,25 @@
+<Window
+	Title="JDP Workbench"
+	Height="400" Width="600" Background="White"
+	xmlns:sys="clr-namespace:System;assembly=mscorlib"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <Window.CommandBindings>
+        <!-- CommandBinding Command="New" CanExecute="NewCommand_CanExecute" Executed="NewCommand_Executed" / -->
+    </Window.CommandBindings>
+
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_File">
+                <!-- MenuItem Command="New" / -->
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" Name="MenuItemExit" />
+            </MenuItem>
+        </Menu>
+        <TextBox AcceptsReturn="True" />
+    </DockPanel>
+
+</Window>

@@ -2,7 +2,7 @@
     RootModule = 'JdpKeepass'
     ModuleVersion = '1.0'
     GUID = 'f02efd3a-dcbe-4b89-8355-69c57e1958bb'
-    Description = 'Module for managing credentials in the KeePass file.'
+    Description = 'Manage credentials in the KeePass file.'
     # RequiredModules = @()
     # RequiredAssemblies = @()
     # ScriptsToProcess = @()
@@ -19,11 +19,11 @@
         PSData = @{
             Tags = @('PSModule')
             # LicenseUri = 'https://github.com/USER/REPOSITORY/blob/master/LICENSE.txt'
-            # ProjectUri = 'https://github.com/USER/REPOSITORY'
+            ProjectUri = 'https://github.com/dpurge/jdp-psmodule'
             # IconUri = ''
             # ReleaseNotes = ''
         }
     }
     # HelpInfoURI = ''
-    DefaultCommandPrefix = 'JDP'
+    DefaultCommandPrefix = 'JdpKeepass'
 }

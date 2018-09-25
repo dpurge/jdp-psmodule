@@ -16,19 +16,19 @@ class KeepassDatabase {
 		$this.CompositeKey.AddUserKey( $this.KcpUserAccount )
 	}
 	
-	Open() {
+	[void] Open() {
 		$this.PwDatabase.Open($this.IOConnectionInfo, $this.CompositeKey, $this.StatusLogger)
 	}
 	
-	Close() {
+	[void] Close() {
 	    $this.PwDatabase.Close()
 	}
 	
-	Save() {
+	[void] Save() {
 		$this.PwDatabase.Save($this.StatusLogger)
 	}
 	
-	Add(
+	[void] Add(
 		[string] $Title,
 		[string] $UserName,
 		[string] $Password,
@@ -59,12 +59,12 @@ class KeepassDatabase {
 		}
 
 		$pUser = New-Object KeePassLib.Security.ProtectedString($True, $UserName)
-		$pPW = New-Object KeePassLib.Security.ProtectedString($True, $Password)
+		$pPassword = New-Object KeePassLib.Security.ProtectedString($True, $Password)
 		$pURL = New-Object KeePassLib.Security.ProtectedString($True, $URL)
 		$pNotes = New-Object KeePassLib.Security.ProtectedString($True, $Note)
 
 		$PwEntry.Strings.Set("UserName", $pUser)
-		$PwEntry.Strings.Set("Password", $pPW)
+		$PwEntry.Strings.Set("Password", $pPassword)
 		$PwEntry.Strings.Set("URL", $pURL)
 		$PwEntry.Strings.Set("Notes", $pNotes)
 		
@@ -77,7 +77,9 @@ class KeepassDatabase {
 		$PwGroup = $Null
 		
 		if ($group) {
-		    $PwGroup = $this.PwDatabase.RootGroup.Groups | Where { $_.Name -eq $Group } | Select-Object -First 1
+			$PwGroup = $this.PwDatabase.RootGroup.Groups `
+				| Where-Object { $_.Name -eq $Group } `
+				| Select-Object -First 1
 			if (-not $PwGroup) {
 			    throw "Group not found in Keepass file: $Group"
 			}
@@ -85,7 +87,9 @@ class KeepassDatabase {
 		    $PwGroup = $this.PwDatabase.RootGroup
 		}
 		
-		$PwEntry = $PwGroup.GetEntries($True) | Where { $_.Strings.ReadSafe("Title") -eq $Title } | Select-Object -First 1
+		$PwEntry = $PwGroup.GetEntries($True) `
+			| Where-Object { $_.Strings.ReadSafe("Title") -eq $Title } `
+			| Select-Object -First 1
 		
 		if (-not $PwEntry) {
 		    throw "No entry found with title: $Title"

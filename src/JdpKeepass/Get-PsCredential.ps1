@@ -1,8 +1,9 @@
-function Get-KeepassPSCredential {
+function Get-PsCredential {
     <#
     .SYNOPSIS
     .DESCRIPTION
     .EXAMPLE
+	    Get-JdpKeepassPsCredential -Title test1 -Group group1
     .OUTPUTS
     .NOTES
         Author: JDP
@@ -22,12 +23,12 @@ function Get-KeepassPSCredential {
         [string] $Vault = 'default',
 		
 		[Parameter(Position=3, Mandatory=$false)]
-		$Config = (Get-KeepassConfig)
+		$Config = (Get-Config)
     )
 	
-	$KeepassCredential = Get-KeepassCredential -Title $Title -Group $Group -Vault $Vault -Config $Config
-	$SecurePassword = ConvertTo-SecureString $KeepassCredential.Password -AsPlainText -Force
-	$KeepassPSCredential = New-Object System.Management.Automation.PSCredential ($KeepassCredential.UserName, $SecurePassword)
+	$Credential = Get-Credential -Title $Title -Group $Group -Vault $Vault -Config $Config
+	$SecurePassword = ConvertTo-SecureString $Credential.Password -AsPlainText -Force
+	$PSCredential = New-Object System.Management.Automation.PSCredential ($Credential.UserName, $SecurePassword)
 	
-	return $KeepassPSCredential
+	return $PSCredential
 }

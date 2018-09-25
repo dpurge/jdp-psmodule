@@ -6,7 +6,7 @@ function Get-Workbench {
     . $PSScriptRoot\class\WpfApplication.ps1
     . $PSScriptRoot\class\Workbench.ps1
 
-    $Workbench = New-Object -TypeName Workbench -ArgumentList $pid, "$PSScriptRoot\xaml\MainWindow.xaml"
+    $Workbench = New-Object -TypeName Workbench -ArgumentList $pid, "$PSScriptRoot\xaml\Workbench.xaml"
 
     <#
     $base64 = ""
