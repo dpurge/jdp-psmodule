@@ -110,3 +110,35 @@ From Visual Studio Code: press `F1`, type `run task`, choose `Run`.
 From command line: `Invoke-PSake build.psake.ps1 -Task Clean`
 
 From Visual Studio Code: press `F1`, type `run task`, choose `Clean`.
+
+## Other notes
+
+Add modules path in `$Profile`
+
+```
+$ModulePath = $env:PSModulePath.Split(';')
+
+foreach ($item in @(
+    'D:\pgm\powershell\Modules'
+    'D:\src\Public\jdp-psmodule\src'
+)) {
+    if ($ModulePath -notcontains $item) {
+        $ModulePath += $item
+    }
+}
+
+$env:PSModulePath = $ModulePath -join ';'
+```
+
+Import package provider:
+
+```
+Import-PackageProvider JdpSystem
+```
+
+Install JDP System:
+
+```
+Import-Module JdpSystem
+Install-System -RootDirectory D:\ -User
+```
