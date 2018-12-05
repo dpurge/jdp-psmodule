@@ -10,8 +10,8 @@
     FormatsToProcess = @(
         'JdpSystem.Info.Format.ps1xml'
     )
-    # NestedModules = @()
-    # ModuleList = @()
+    #NestedModules = @()
+    #ModuleList = @()
     FileList = @(
         'JdpSystem.psd1',
         'JdpSystem.psm1',
