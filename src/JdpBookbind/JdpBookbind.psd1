@@ -17,7 +17,6 @@ CLRVersion = '4.0'
 # ScriptsToProcess = @()
 # TypesToProcess = @()
 FormatsToProcess = @(
-    'JdpBookbind.Example.Format.ps1xml'
 )
 # NestedModules = @()
 FunctionsToExport = '*'
@@ -27,8 +26,7 @@ AliasesToExport = '*'
 # ModuleList = @()
 FileList = @(
     'JdpBookbind.psd1',
-	'JdpBookbind.psm1',
-	'JdpBookbind.Example.Format.ps1xml'
+	'JdpBookbind.psm1'
 )
 PrivateData = @{
 

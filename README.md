@@ -7,14 +7,11 @@ This project builds powershell modules.
 
 ## Build dependencies
 
-This project uses Psake as its build system, Pester to run tests, PlatyPS to generate module documentation and nuget to package the modules.
-
 Install them like so:
 
 ```
 Install-Module psake
 Install-Module Pester
-Install-Module PlatyPS
 choco install NuGet.CommandLine
 ```
 

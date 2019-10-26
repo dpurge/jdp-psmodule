@@ -112,12 +112,12 @@ Source version: MISSING
             -VariablesToExport '*' `
             -AliasesToExport '*'
 
-		if (Test-Path "$ModuleSourceDir\docs") {
-            foreach ($DocsDir in (Get-ChildItem -Path "$ModuleSourceDir\docs" | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name)) {
-			    Write-Host "Generating documentation: $ModuleOutputDir\$DocsDir"
-                New-ExternalHelp "$ModuleSourceDir\docs\$DocsDir" -OutputPath "$ModuleOutputDir\$DocsDir" | Out-Null
-            }
-		}
+		#if (Test-Path "$ModuleSourceDir\docs") {
+        #    foreach ($DocsDir in (Get-ChildItem -Path "$ModuleSourceDir\docs" | Where-Object { $_.PSIsContainer } | Select-Object -ExpandProperty Name)) {
+		#	    Write-Host "Generating documentation: $ModuleOutputDir\$DocsDir"
+        #        New-ExternalHelp "$ModuleSourceDir\docs\$DocsDir" -OutputPath "$ModuleOutputDir\$DocsDir" | Out-Null
+        #    }
+		#}
 		
 		Write-Host "Creating nuspec file: $ModuleNuspec"
 		Import-LocalizedData -BaseDirectory $ModuleOutputDir -FileName "$Module.psd1" -BindingVariable ModuleData
