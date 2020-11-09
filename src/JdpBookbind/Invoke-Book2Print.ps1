@@ -7,6 +7,8 @@ Function Invoke-Book2Print {
 		[int]    $Sheets = 8
 	)
 
+	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
+
 	$PagesPerGathering = 4 * $Sheets
     
     [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
@@ -21,7 +23,9 @@ Function Invoke-Book2Print {
 	}
 
 	$Index = 0
+	$Counter = 0
 	while ($Index -lt $Pages.Length - 1) {
+		$Counter++
 		$Gathering = $Pages[$Index .. ($Index + $PagesPerGathering - 1)]
 
 		$PrintSequence = @()
@@ -33,10 +37,31 @@ Function Invoke-Book2Print {
 			$end -= 2
 		}
 
+		$infile = $BookFile.FullName
+		$outfile = Join-Path `
+			-Path $OutputDirectory `
+			-ChildPath ("{0}-{1:D3}.pdf" -f $BookFile.BaseName, $Counter)
+
 		switch ($BookFile.Extension) {
 			'.pdf' {
+				$BlankPage = Join-Path -Path $PsScriptRoot -ChildPath $config.Blank.Pdf.a5
 				if ( -not $OutputDirectory.Exists) { $OutputDirectory.Create() }
-				Write-Host ($PrintSequence -join '-')
+				$pgm = $config.Tools.PDFtk
+				$pgmParam =  ,"A=`"${infile}`""
+				$pgmParam +=  ,"B=`"${BlankPage}`""
+				$pgmParam +=  ,"cat"
+				$pgmParam +=  ($PrintSequence | ForEach-Object { if($_) {"A${_}"} else {"B1"} })
+				$pgmParam +=  ,"output"
+				$pgmParam +=  ,"`"${outfile}`""
+				& $pgm @pgmParam
+				if ($?) {
+					Write-Output $outfile
+				} else {
+					$msg = $Error[0].Exception.Message
+					Write-Error "Error in chunk ${Counter}: ${msg}"
+					#exit
+				}
+				
 			}
 			default {
 				throw "Unsupported file format: $($BookFile.Extension)"
