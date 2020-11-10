@@ -6,7 +6,7 @@
         Djvm = "D:\pgm\DjVuLibre\djvm.exe"
         DDjVu = "D:\pgm\DjVuLibre\ddjvu.exe"
         PdfImages = "D:\pgm\poppler\bin\pdfimages.exe"
-        PDFtk = "E:\pgm\PDFtk\bin\pdftk.exe"
+        PDFtk = "D:\pgm\PDFtk\bin\pdftk.exe"
     }
 
     Blank = @{

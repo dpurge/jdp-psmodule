@@ -32,7 +32,8 @@ Function Invoke-Book2Print {
 		$start = 0
 		$end = $Gathering.Length - 1
 		while ($start -lt $end) {
-			$PrintSequence += $Gathering[$start], $Gathering[$start+1], $Gathering[$end-1], $Gathering[$end]
+			# $PrintSequence += $Gathering[$start], $Gathering[$start+1], $Gathering[$end-1], $Gathering[$end]
+			$PrintSequence += $Gathering[$end], $Gathering[$start], $Gathering[$start+1], $Gathering[$end-1] 
 			$start += 2
 			$end -= 2
 		}
