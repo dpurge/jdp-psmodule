@@ -8,10 +8,10 @@ Function Invoke-Book2Print {
 	)
 
 	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
-
+	[System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
+    
 	$PagesPerGathering = 4 * $Sheets
     
-    [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
     [IO.FileInfo] $BookFile = [IO.Path]::GetFullPath($Book)
     if ( -not $BookFile.Exists) { throw "File does not exist: $($BookFile.FullName)"}
     if ( -not $Name) { $Name = $BookFile.Basename }
@@ -32,7 +32,6 @@ Function Invoke-Book2Print {
 		$start = 0
 		$end = $Gathering.Length - 1
 		while ($start -lt $end) {
-			# $PrintSequence += $Gathering[$start], $Gathering[$start+1], $Gathering[$end-1], $Gathering[$end]
 			$PrintSequence += $Gathering[$end], $Gathering[$start], $Gathering[$start+1], $Gathering[$end-1] 
 			$start += 2
 			$end -= 2

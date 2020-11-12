@@ -13,6 +13,8 @@ Function Invoke-Image2Book {
         [string] $Djvm = "D:\pgm\DjVuLibre\djvm.exe",
         [string] $Ddjvu = "D:\pgm\DjVuLibre\ddjvu.exe"
     )
+
+	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
     
     [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
     [IO.DirectoryInfo] $BookDirectory = [IO.Path]::GetFullPath($Book)

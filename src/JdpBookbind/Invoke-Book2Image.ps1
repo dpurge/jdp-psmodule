@@ -1,27 +1,31 @@
 Function Invoke-Book2Image {
     [CmdletBinding()]
     Param(
-	    [string] $Book,
-        [string] $Name,
-        [string] $Image = 'page',
-        [string] $PdfImages = "D:\pgm\poppler\bin\pdfimages.exe",
-        [string] $DDjVu = "D:\pgm\DjVuLibre\ddjvu.exe"
+	    [string] $InputFile,
+        [string] $OutputDirectory,
+        [string] $Image = 'page'
 	)
+
+	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
+    $PdfImages = $config.Tools.PdfImages
+    $DDjVu = $config.Tools.DDjVu
     
     [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
-    [IO.FileInfo] $BookFile = [IO.Path]::GetFullPath($Book)
+
+    [IO.FileInfo] $BookFile = [IO.Path]::GetFullPath($InputFile)
     if ( -not $BookFile.Exists) { throw "File does not exist: $($BookFile.FullName)"}
-    if ( -not $Name) { $Name = $BookFile.Basename }
-    [IO.DirectoryInfo] $OutputDirectory = Join-Path $BookFile.Directory.FullName $Name
+
+    if ( -not $OutputDirectory) { $OutputDirectory = $BookFile.Basename }
+    [IO.DirectoryInfo] $OutDir = Join-Path $BookFile.Directory.FullName $OutputDirectory
 
     switch ($BookFile.Extension) {
         '.pdf' {
-            if ( -not $OutputDirectory.Exists) { $OutputDirectory.Create() }
-            & $PdfImages -png "$($BookFile.FullName)" "$(Join-Path $OutputDirectory.FullName $Image)"
+            if ( -not $OutDir.Exists) { $OutDir.Create() }
+            & $PdfImages -png "$($BookFile.FullName)" "$(Join-Path $OutDir.FullName $Image)"
         }
         '.djvu' {
-            if ( -not $OutputDirectory.Exists) { $OutputDirectory.Create() }
-            & $DDjVu -format=tiff -eachpage "$($BookFile.FullName)" "$(Join-Path $OutputDirectory.FullName $Image)-%04d.tiff"
+            if ( -not $OutDir.Exists) { $OutDir.Create() }
+            & $DDjVu -format=tiff -eachpage "$($BookFile.FullName)" "$(Join-Path $OutDir.FullName $Image)-%04d.tiff"
         }
         default {
             throw "Unsupported file format: $($BookFile.Extension)"
