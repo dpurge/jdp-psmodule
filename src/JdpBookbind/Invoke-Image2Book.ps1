@@ -6,6 +6,7 @@ Function Invoke-Image2Book {
         [string] $Image = 'page',
         [string] $Format = 'tiff',
         [switch] $Color,
+        [switch] $Convert,
         [switch] $NumberSuffix,
         [string] $ImageMagick = "D:\pgm\ImageMagick\magick.exe",
         [string] $CJB2 = "D:\pgm\DjVuLibre\cjb2.exe",
