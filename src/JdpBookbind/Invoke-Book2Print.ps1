@@ -7,7 +7,7 @@ Function Invoke-Book2Print {
 		[int]    $Sheets = 8
 	)
 
-	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
+	$config = JdpBookbind\Import-Configuration
 	[System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
     
 	$PagesPerGathering = 4 * $Sheets

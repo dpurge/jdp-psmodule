@@ -6,7 +6,7 @@ Function Invoke-Book2Image {
         [string] $Image = 'page'
 	)
 
-	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
+    $config = JdpBookbind\Import-Configuration
     $PdfImages = $config.Tools.PdfImages
     $DDjVu = $config.Tools.DDjVu
     

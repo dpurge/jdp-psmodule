@@ -6,5 +6,5 @@ Function Invoke-Image2Pdf {
 		[string[]] $Format = @('.png', '.jpg', '.jpeg', '.tif', '.tiff', '.bmp')
 	)
 
-	$config = Import-PowerShellDataFile $PSScriptRoot\Configuration.psd1
+	$config = JdpBookbind\Import-Configuration
 }
