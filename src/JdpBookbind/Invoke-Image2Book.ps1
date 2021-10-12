@@ -4,18 +4,18 @@ Function Invoke-Image2Book {
         [string] $Book,
         [string] $Name,
         [string] $Image = 'page',
-        [string] $Format = 'tiff',
+        [string] $Format = 'tif',
         [switch] $Color,
         [switch] $Convert,
-        [switch] $NumberSuffix,
-        [string] $ImageMagick = "D:\pgm\ImageMagick\magick.exe",
-        [string] $CJB2 = "D:\pgm\DjVuLibre\cjb2.exe",
-        [string] $CpalDjvu = "D:\pgm\DjVuLibre\cpaldjvu.exe",
-        [string] $Djvm = "D:\pgm\DjVuLibre\djvm.exe",
-        [string] $Ddjvu = "D:\pgm\DjVuLibre\ddjvu.exe"
+        [switch] $NumberSuffix
     )
 
 	$config = JdpBookbind\Import-Configuration
+	$ImageMagick = $config.Tools.ImageMagick
+	$CJB2 = $config.Tools.CJB2
+	$CpalDjvu = $config.Tools.CpalDjvu
+	$Djvm = $config.Tools.Djvm
+	$Ddjvu = $config.Tools.DDjVu
     
     [System.IO.Directory]::SetCurrentDirectory(((Get-Location -PSProvider FileSystem).ProviderPath))
     [IO.DirectoryInfo] $BookDirectory = [IO.Path]::GetFullPath($Book)
@@ -50,8 +50,8 @@ Function Invoke-Image2Book {
                 }
                 & "${CpalDjvu}" -dpi 600 -colors 8 $Page.FullName $NewPage.FullName
             } else {
-                if ($Convert -or $Page.Extension -ne '.tiff') {
-                    [IO.FileInfo] $TempPage = Join-Path $OutputDirectory.FullName "$($NewPage.BaseName).tiff"
+                if ($Convert -or $Page.Extension -ne '.tif') {
+                    [IO.FileInfo] $TempPage = Join-Path $OutputDirectory.FullName "$($NewPage.BaseName).tif"
                     & "${ImageMagick}" "$($Page.FullName)" +dither -colors 2 -colorspace gray -normalize -compress group4 "$($TempPage.FullName)"
                     $Page = $TempPage
                 }
